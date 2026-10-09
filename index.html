@@ -124,22 +124,16 @@ footer{text-align:center;padding:50px 20px;background:#f7e5e8;color:var(--deep);
 
 
 <section id="cancion">
-  <div class="section-head"><div class="eyebrow">Nuestra canción</div><h2>Creo en ti · Reik 🎶</h2>
-  <p>Una canción para acompañar nuestros recuerdos. Reprodúcela aquí, sin salir de esta página.</p></div>
+  <div class="section-head"><div class="eyebrow">Nuestra canción</div><h2>Nuestra canción 🎶</h2>
+  <p>Una canción para acompañar nuestros recuerdos. Toca reproducir para escucharla aquí, sin salir de esta página.</p></div>
   <div class="card song-card" style="max-width:760px;margin:auto;text-align:center">
     <div class="song-art">♫ <span>♡</span> ♫</div>
-    <p style="font:16px/1.7 Arial,sans-serif">Reik · Creo en ti</p>
-    <p id="autoplayHint" class="small">Intentando iniciar la canción automáticamente. Si tu navegador lo bloquea, toca reproducir en el video.</p>
-    <div class="video-frame">
-      <iframe
-        src="https://www.youtube-nocookie.com/embed/snFhcHHdzT0?autoplay=1&mute=0&playsinline=1&enablejsapi=1"
-        title="Creo en ti — Reik (video de YouTube)"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerpolicy="strict-origin-when-cross-origin"
-        allowfullscreen>
-      </iframe>
-    </div>
-    <p class="small" style="margin-top:14px">Si el reproductor no carga, <a href="https://youtu.be/snFhcHHdzT0" target="_blank" rel="noopener noreferrer">abre la canción en YouTube</a>.</p>
+    <p style="font:16px/1.7 Arial,sans-serif">Nuestra canción · Sergio &amp; Valeska</p>
+    <audio id="ourSong" controls preload="metadata" playsinline style="display:block;width:100%;max-width:520px;margin:18px auto">
+      <source src="creo-en-ti.mp3" type="audio/mpeg">
+      Tu navegador no puede reproducir este audio.
+    </audio>
+    <p class="small">Si la música no comienza sola, toca ▶ en el reproductor. Safari puede bloquear la reproducción automática.</p>
   </div>
 </section>
 
@@ -217,14 +211,20 @@ document.getElementById('days').textContent = days;
 document.getElementById('hours').textContent = now.getHours();
 
 function openSurprise(){
-  document.getElementById('surpriseCover').classList.add('closed');
-  const player = document.querySelector('#cancion iframe');
-  if (player) {
-    const base = 'https://www.youtube-nocookie.com/embed/snFhcHHdzT0';
-    player.src = base + '?autoplay=1&mute=0&playsinline=1&enablejsapi=1';
-  }
+  const cover = document.getElementById('surpriseCover');
+  if (cover) cover.classList.add('closed');
   document.querySelector('#inicio').scrollIntoView({behavior:'smooth'});
+  const audio = document.getElementById('ourSong');
+  if (audio) { const attempt = audio.play(); if (attempt && attempt.catch) attempt.catch(()=>{}); }
 }
+const surpriseToggle = document.getElementById('surpriseToggle');
+if (surpriseToggle) surpriseToggle.addEventListener('change', function(){
+  if (this.checked) {
+    const cover = document.getElementById('surpriseCover');
+    if (cover) cover.classList.add('closed');
+    setTimeout(()=>{ const audio=document.getElementById('ourSong'); if(audio){const attempt=audio.play(); if(attempt&&attempt.catch)attempt.catch(()=>{});} document.querySelector('#inicio').scrollIntoView({behavior:'smooth'}); }, 50);
+  }
+});
 
 function respond(n){
  const messages=[
@@ -245,7 +245,7 @@ const notes=[
  'Mi deseo es que nunca nos falten las ganas de escucharnos, reír y crear recuerdos que sean solo nuestros. ✨'
 ];
 function showNote(n){document.getElementById('hiddenNote').textContent=notes[n];}
-// La canción elegida se abre en YouTube para reproducir la versión oficial.
+// Reproductor de audio local integrado en la página.
 
 </script>
 </body>
